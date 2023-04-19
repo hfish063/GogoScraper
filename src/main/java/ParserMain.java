@@ -1,8 +1,9 @@
-public class ScraperMain {
+public class ParserMain {
     public static void main(String[] args) {
         Parser p = new Parser();
 
         // test output for parser methods
-        p.searchAnime("https://gogoanime.llc/search.html?keyword=demon%20slayer");
+        System.out.println(p.searchAnime("86"));
+        System.out.println(p.getEpisode("86", "1"));
     }
 }

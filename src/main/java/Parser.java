@@ -6,38 +6,64 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class Parser {
-    private String url;
+    private final String url;
 
     public Parser() {
-        url = "https://gogoanime.llc/search.html?keyword=86";
+        url = "https://gogoanime.llc";
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public String toString() {
+        return "Parser{" +
+                "url='" + url + '\'' +
+                '}';
     }
 
     /**
      * Find and return all search result data for
      * specified title
      *
-     * @param keyword the title to be searched
+     * @param title the title to be searched
      */
-    public void searchAnime(String keyword) {
+    public String searchAnime(String title) {
+        String resultList = null;
+
         try {
-            Document doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.connect("https://gogoanime.llc/search.html?keyword=" + title).get();
 
-            //Elements result = doc.select("ul.items");
-            Elements result = doc.select("ul.items");
+            Elements results = doc.select("ul.items");
 
-            // iterate through elements and grab <a> tags
-            // extract title info from tag
-            for(Element item : result) {
-                Elements title = item.select("p.name");
-
-                System.out.println(title.text());
-            }
-//            String text = result.text();
-//            System.out.println(text);
-
+            resultList = results.text();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return resultList;
+    }
 
+    /**
+     * Find and return the video url for specified episode
+     *
+     * @param title the title to be searched, must be valid
+     * @param episodeNumber the specific episode of title, must be valid
+     */
+    public String getEpisode(String title, String episodeNumber) {
+        String iframeSrc = null;
+
+        try {
+            Document doc = Jsoup.connect("https://gogoanime.llc/" + title + "-episode-" + episodeNumber).get();
+
+            Element iframe = doc.select("iframe").first();
+
+            if (iframe != null) {
+                iframeSrc = "https:" + iframe.attr("src");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return iframeSrc;
     }
 }
