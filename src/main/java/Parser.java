@@ -28,6 +28,7 @@ public class Parser {
      * specified title
      *
      * @param title the title to be searched
+     * @return the search results
      */
     public String searchAnime(String title) {
         String resultList = null;
@@ -49,12 +50,13 @@ public class Parser {
      *
      * @param title the title to be searched, must be valid
      * @param episodeNumber the specific episode of title, must be valid
+     * @return url to video
      */
     public String getEpisode(String title, String episodeNumber) {
         String iframeSrc = null;
 
         try {
-            Document doc = Jsoup.connect("https://gogoanime.llc/" + title + "-episode-" + episodeNumber).get();
+            Document doc = Jsoup.connect("https://gogoanime.llc/" + formatVideoTitle(title) + "-episode-" + episodeNumber).get();
 
             Element iframe = doc.select("iframe").first();
 
@@ -65,5 +67,16 @@ public class Parser {
             e.printStackTrace();
         }
         return iframeSrc;
+    }
+
+    /**
+     * Translates the title into url format
+     * Inserts '-' characters over spaces
+     *
+     * @param title the anime title
+     * @return anime title in url accepted format
+     */
+    private String formatVideoTitle(String title) {
+        return title.replace(" ", "-");
     }
 }
