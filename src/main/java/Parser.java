@@ -70,7 +70,7 @@ public class Parser {
     }
 
     /**
-     * Translates the title into url format
+     * Helper method for getEpisode, translate the title into url format
      * Inserts '-' characters over spaces
      *
      * @param title the anime title
